@@ -1,4 +1,4 @@
-# 💜 Laravel 11 Modern Mor Auth Şablonu
+#  Laravel 11 Modern Mor Auth Şablonu
 
 Bu proje, standart Laravel Breeze yapısını **modern mor gradyan** tasarımıyla birleştiren, tamamen Türkçeleştirilmiş bir yetkilendirme (Auth) şablonudur.
 
