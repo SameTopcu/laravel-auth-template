@@ -287,51 +287,41 @@
     
     <!-- HTML5 Validation Messages in Turkish -->
     <script>
+        // HTML5 doğrulama mesajlarını Türkçeleştir
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form');
-            const inputs = form.querySelectorAll('input[required], textarea[required]');
+            const forms = document.querySelectorAll('form');
             
-            inputs.forEach(function(input) {
-                input.addEventListener('invalid', function(e) {
-                    e.preventDefault();
+            forms.forEach(function(form) {
+                form.addEventListener('invalid', function(e) {
+                    const input = e.target;
                     
-                    let message = '';
-                    const fieldName = input.labels && input.labels[0] ? input.labels[0].textContent.trim() : input.name;
-                    
+                    // HTML5 doğrulama mesajlarını Türkçeleştir
                     if (input.validity.valueMissing) {
-                        message = fieldName + ' alanı gereklidir.';
-                    } else if (input.validity.typeMismatch) {
-                        if (input.type === 'email') {
-                            message = 'Geçerli bir e-posta adresi giriniz.';
-                        } else {
-                            message = fieldName + ' alanı geçersiz formatta.';
+                        const fieldName = input.getAttribute('name');
+                        let message = 'Bu alan gereklidir.';
+                        
+                        if (fieldName === 'email') {
+                            message = 'E-posta adresi gereklidir.';
+                        } else if (fieldName === 'password') {
+                            message = 'Şifre gereklidir.';
+                        } else if (fieldName === 'name') {
+                            message = 'Ad Soyad gereklidir.';
+                        } else if (fieldName === 'password_confirmation') {
+                            message = 'Şifre onayı gereklidir.';
                         }
+                        
+                        input.setCustomValidity(message);
+                    } else if (input.validity.typeMismatch && input.type === 'email') {
+                        input.setCustomValidity('Lütfen geçerli bir e-posta adresi girin. Örnek: kullanici@hotmail.com');
                     } else {
-                        message = fieldName + ' alanı geçersiz.';
-                    }
-                    
-                    input.setCustomValidity(message);
-                    
-                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('invalid-feedback')) {
-                        const errorDiv = document.createElement('div');
-                        errorDiv.className = 'invalid-feedback';
-                        errorDiv.textContent = message;
-                        input.parentNode.appendChild(errorDiv);
-                    } else {
-                        input.nextElementSibling.textContent = message;
-                    }
-                    
-                    input.classList.add('is-invalid');
-                });
-                
-                input.addEventListener('input', function() {
-                    if (input.validity.valid) {
                         input.setCustomValidity('');
-                        input.classList.remove('is-invalid');
-                        const errorDiv = input.nextElementSibling;
-                        if (errorDiv && errorDiv.classList.contains('invalid-feedback') && !errorDiv.textContent.includes('@error')) {
-                            errorDiv.remove();
-                        }
+                    }
+                }, true);
+                
+                // Input değiştiğinde custom validity'yi temizle
+                form.addEventListener('input', function(e) {
+                    if (e.target.validity.valid) {
+                        e.target.setCustomValidity('');
                     }
                 });
             });
